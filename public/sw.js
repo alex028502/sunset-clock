@@ -2,9 +2,9 @@
 
 const CACHE_NAME = 'sunset-cache';
 const CACHED_URLS = [
-  '/index.html',
-  '/bundle.js',
-  '/face.svg',
+  'index.html',
+  'bundle.js',
+  'face.svg',
 ];
 
 self.addEventListener('install', function(event) {
