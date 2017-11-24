@@ -36,6 +36,7 @@ const store = createStore(reducer, Object.assign({
 store.subscribe(() => {
   // thanks https://stackoverflow.com/a/37690899/5203563
   localStorage.setItem('coordinates', JSON.stringify(store.getState().coordinates));
+  // TODO: better not to save to local storage on every clock tick
 });
 
 const render = function() {
