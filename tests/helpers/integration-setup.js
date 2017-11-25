@@ -44,3 +44,5 @@ global.localStorage = {
     global.testVars.storedCoordinates = value;
   },
 };
+
+

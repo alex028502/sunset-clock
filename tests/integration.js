@@ -4,6 +4,8 @@ const EXPECTED_DEFAULT_POSITION = '51°47′60″N 0°0′0″W';
 const expect = require('chai').expect;
 
 require('./helpers/integration-setup');
+const findOnClickMethodOfElement = require('./helpers/find-on-click');
+
 require('../src/app');
 const dom = global.testVars.dom;
 
@@ -84,10 +86,3 @@ expect(dom.serialize(document)).to.include('updated');
 expect(dom.serialize(document)).to.include('55°0′0″N 55°0′0″');
 
 process.exit(0);
-
-function findOnClickMethodOfElement(element) {
-  // trial and error
-  // looking for something like __reactEventHandlers$st5eih1w5dnuubr8uo50cnmi
-  const eventHandlerKey = Object.keys(element).filter((name) => name.indexOf('reactEventHandlers') !== -1)[0];
-  return element[eventHandlerKey].onClick;
-}

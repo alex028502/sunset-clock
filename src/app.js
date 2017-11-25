@@ -19,23 +19,35 @@ const reducer = combineReducers({
   coordinates: require('./reducers/coordinates'),
 });
 
-const persistedState = localStorage.getItem('coordinates') ? {
-  coordinates: JSON.parse(localStorage.getItem('coordinates')),
+let persistedState = null;
+let errorMessage = 'using Greenwich until location is updated';
+try {
+  persistedState = localStorage.getItem('coordinates') && JSON.parse(localStorage.getItem('coordinates'));
+} catch (e) {
+  errorMessage = `${e} - cannot read location from disk, and might not be able to write`;
+}
+
+const initialState = persistedState ? {
+  coordinates: persistedState,
 } : {
   coordinates: {
     longitude: 0,
     latitude: 51 + 48 / 60,
-    error: 'using Greenwich until location is updated',
+    error: errorMessage,
   },
 };
 
 const store = createStore(reducer, Object.assign({
   time: new Date(),
-}, persistedState), require('./lib/get-redux-dev-tools-ext')(window));
+}, initialState), require('./lib/get-redux-dev-tools-ext')(window));
 
 store.subscribe(() => {
   // thanks https://stackoverflow.com/a/37690899/5203563
-  localStorage.setItem('coordinates', JSON.stringify(store.getState().coordinates));
+  try {
+    localStorage.setItem('coordinates', JSON.stringify(store.getState().coordinates));
+  } catch (e) {
+    // fail silently - the should have already been warned when reading
+  }
   // TODO: better not to save to local storage on every clock tick
 });
 
