@@ -1,7 +1,7 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 version: 2
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/node:7.10
     working_directory: ~/repo
@@ -9,13 +9,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
+          - full-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run: yarn install
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: full-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run: yarn test
   deploy:
     docker:
@@ -25,23 +24,22 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
+          - prod-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run: yarn install --production
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: prod-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run: yarn run build
       - run: ./scripts/deploy.sh
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - build
+      - test
       - deploy:
           requires:
-            - build
+            - test
           filters:
             branches:
               only: master
