@@ -9,13 +9,13 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - full-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - run: yarn install
+          - full-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
+      - run: npm install
       - save_cache:
           paths:
             - node_modules
-          key: full-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - run: yarn test
+          key: full-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
+      - run: npm test
   deploy:
     docker:
       - image: circleci/node:7.10
@@ -24,13 +24,13 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - prod-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - run: yarn install --production
+          - prod-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
+      - run: npm install --production
       - save_cache:
           paths:
             - node_modules
-          key: prod-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - run: yarn run build
+          key: prod-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
+      - run: npm run build
       - run: ./scripts/deploy.sh
 workflows:
   version: 2
