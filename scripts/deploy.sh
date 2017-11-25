@@ -24,5 +24,7 @@ git -C $DEMO_PATH commit -m"build version $VERSION
 $STATUS
 
 $DIFF
+
+[ci skip]
 "
 git -C $DEMO_PATH push origin HEAD:gh-pages -f
