@@ -17,6 +17,8 @@ rm -rf $DEMO_PATH
 mkdir $DEMO_PATH
 cp -r public/* $DEMO_PATH/ # this will skip files starting with .
 git -C $DEMO_PATH init
+git -C $DEMO_PATH config user.email "cd@example.com"
+git -C $DEMO_PATH config user.name "Continuous Deployment"
 git -C $DEMO_PATH remote add origin $REPO
 git -C $DEMO_PATH add -A
 git -C $DEMO_PATH commit -m"build version $VERSION
