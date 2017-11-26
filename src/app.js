@@ -53,12 +53,10 @@ store.subscribe(() => {
 
 const render = function() {
   ReactDOM.render(
-    <Centre>
-      <Clock
-        time={store.getState().time}
-        coordinates={store.getState().coordinates} updateLocation={updateLocation}
-      />
-    </Centre>,
+    <Clock
+      time={store.getState().time}
+      coordinates={store.getState().coordinates} updateLocation={updateLocation}
+    />,
     document.getElementById('root'),
   );
 };
@@ -86,12 +84,6 @@ function updateLocation() {
       value: error.message,
     });
   });
-}
-
-function Centre(props) {
-  return <div style={{'textAlign': 'center'}}>
-    { props.children }
-  </div>;
 }
 
 function Clock(props) {
