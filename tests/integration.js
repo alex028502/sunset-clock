@@ -24,8 +24,7 @@ expect(dom.serialize(document)).to.include('Greenwich');
 
 global.testVars.timerCallback();
 
-expect(global.testVars.storedCoordinates).to.be.ok; // for now it saves the location on every iteration
-expect(global.testVars.storedCoordinates).to.include('Greenwich');
+expect(global.testVars.storedCoordinates).not.to.be.ok;
 expect(dom.serialize(document)).to.include('face.svg');
 expect(dom.serialize(document)).to.include(EXPECTED_DEFAULT_POSITION);
 expect(dom.serialize(document)).to.include('Greenwich');
@@ -78,7 +77,7 @@ expect(dom.serialize(document)).to.include('55°0′0″N 55°0′0″');
 
 
 expect(JSON.parse(global.testVars.storedCoordinates)).to.have.property('latitude', 55);
-expect(JSON.parse(global.testVars.storedCoordinates)).to.have.property('timestamp');
+expect(JSON.parse(global.testVars.storedCoordinates)).not.to.have.property('timestamp');
 expect(JSON.parse(global.testVars.storedCoordinates)).to.have.property('longitude', 55);
 
 global.testVars.timerCallback();

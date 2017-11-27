@@ -41,15 +41,13 @@ const store = createStore(reducer, Object.assign({
   time: new Date(),
 }, initialState), require('./lib/get-redux-dev-tools-ext')(window));
 
-store.subscribe(() => {
-  // thanks https://stackoverflow.com/a/37690899/5203563
+function saveCoordinates(coordinates) {
   try {
-    localStorage.setItem('coordinates', JSON.stringify(store.getState().coordinates));
+    localStorage.setItem('coordinates', JSON.stringify(coordinates));
   } catch (e) {
     // fail silently - the should have already been warned when reading
   }
-  // TODO: better not to save to local storage on every clock tick
-});
+}
 
 const render = function() {
   ReactDOM.render(
@@ -73,11 +71,13 @@ function setTime() {
 
 function updateLocation() {
   navigator.geolocation.getCurrentPosition(function(position) {
-    store.dispatch({type: 'SET_COORDINATES', value: {
+    const newCoordinates = {
       longitude: position.coords.longitude,
       latitude: position.coords.latitude,
       error: null,
-    }});
+    };
+    store.dispatch({type: 'SET_COORDINATES', value: newCoordinates});
+    saveCoordinates(newCoordinates);
   }, function(error) {
     store.dispatch({
       type: 'SET_COORDINATES_ERROR',
