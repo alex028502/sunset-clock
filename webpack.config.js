@@ -1,4 +1,4 @@
-const StringReplacePlugin = require("string-replace-webpack-plugin");
+const StringReplacePlugin = require('string-replace-webpack-plugin');
 const path = require('path');
 const uuid = require('uuid');
 
