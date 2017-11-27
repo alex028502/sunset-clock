@@ -2,3 +2,9 @@
 /bundle.js.map
 /launcher-icon-*x.png
 /favicon.ico
+/app.js
+/app.js.map
+/service-worker.js
+/service-worker.js.map
+/sw-registration.js
+/sw-registration.js.map

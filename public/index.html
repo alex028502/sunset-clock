@@ -9,21 +9,9 @@
     <link rel="manifest" href="manifest.json" />
     <link rel="apple-touch-icon" href="launcher-icon-1x.png">
 </head>
-
 <body>
     <div id="root" style="text-align: center;" />
-    <script src="bundle.js" type="text/javascript"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(function(registration) {
-                console.log('Registration succeeded. Scope is ' + registration.scope);
-            }).catch(function(err) {
-                console.log(err);
-            });
-        } else {
-            console.log('service worker will not work');
-        }
-    </script>
+    <script src="app.js" type="text/javascript"></script>
+    <script src="sw-registration.js" type="text/javascript"></script>
 </body>
-
 </html>
