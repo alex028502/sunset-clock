@@ -8,38 +8,22 @@ const expect = require('chai').expect;
 require('./helpers/integration-setup');
 const findOnClickMethodOfElement = require('./helpers/find-on-click');
 
-const NO_WRITE_MESSAGE = 'access denied for writing';
-const NO_READ_MESSAGE = 'access denied for reading';
-
-global.localStorage = {
-  setItem: function(key) {
-    throw new Error(NO_WRITE_MESSAGE);
-  },
-  getItem: function(key, value) {
-    throw new Error(NO_READ_MESSAGE);
-  },
-};
+global.testVars.storedCoordinates = 'THIS IS NOT JSON';
 
 require('../src/app');
 const dom = global.testVars.dom;
 
 expect(global.testVars.timerCallback).to.be.a('function');
 expect(global.testVars.timerInterval).to.equal(10000);
-expect(global.testVars.storedCoordinates).not.to.be.ok;
-
-// should fail silently when it tries to write
-// since it already got a messsage when it tried to read initially
+expect(global.testVars.storedCoordinates).to.be.ok;
 
 expect(dom.serialize(document)).to.include('face.svg');
 expect(dom.serialize(document)).not.to.include('Greenwich');
+
+// doesn't know that it's just a json problem - assumes it can't read
 expect(dom.serialize(document)).to.include('cannot read');
 
-global.testVars.timerCallback(); // should fail silently
-
-expect(dom.serialize(document)).to.include('face.svg');
-expect(dom.serialize(document)).not.to.include('Greenwich');
-expect(dom.serialize(document)).to.include(NO_READ_MESSAGE);
-expect(dom.serialize(document)).not.to.include(NO_WRITE_MESSAGE);
+// should still be able to save new coordinates
 
 const button = dom.window.document.querySelector('button');
 findOnClickMethodOfElement(button)();
@@ -55,13 +39,13 @@ global.testVars.locationCallback({
 });
 
 expect(dom.serialize(document)).to.include('face.svg');
-expect(dom.serialize(document)).not.to.include('Greenwich');
-
-// nothing is saved but there is no message anymore
-expect(dom.serialize(document)).not.to.include('cannot read');
-expect(dom.serialize(document)).not.to.include(NO_READ_MESSAGE);
-expect(dom.serialize(document)).not.to.include(NO_WRITE_MESSAGE);
 expect(dom.serialize(document)).to.include('55');
+expect(dom.serialize(document)).to.include('updated');
+expect(dom.serialize(document)).not.to.include('Greenwich');
+expect(dom.serialize(document)).not.to.include('cannot read');
 
+// everything should be saved in local storage
+expect(global.testVars.storedCoordinates).to.be.ok;
+expect(JSON.stringify(global.testVars.storedCoordinates)).to.include('55');
 
 process.exit(0);
