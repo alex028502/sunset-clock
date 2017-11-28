@@ -4,6 +4,8 @@
 /favicon.ico
 /app.js
 /app.js.map
+/root.js
+/root.js.map
 /service-worker.js
 /service-worker.js.map
 /sw-registration.js

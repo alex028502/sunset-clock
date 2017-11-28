@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-import ReactDOM from 'react-dom';
 import {createStore} from 'redux';
 
 import {combineReducers} from 'redux';
@@ -120,8 +119,5 @@ function ClockFace(props) {
   />;
 }
 
-ReactDOM.render(
-  <ClockApp window={window} localStorage={localStorage} />,
-  document.getElementById('root'),
-);
+module.exports = ClockApp;
 

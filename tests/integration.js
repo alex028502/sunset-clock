@@ -6,7 +6,7 @@ const expect = require('chai').expect;
 require('./helpers/integration-setup');
 const findOnClickMethodOfElement = require('./helpers/find-on-click');
 
-require('../src/app');
+require('../src/root');
 const dom = global.testVars.dom;
 
 expect(global.testVars.timerCallback).to.be.a('function');

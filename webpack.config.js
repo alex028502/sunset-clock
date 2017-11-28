@@ -7,7 +7,7 @@ module.exports = {
     new StringReplacePlugin(),
   ],
   entry: {
-    'app': ['./src/app.js'],
+    'root': ['./src/root.js'],
     'service-worker': ['./src/service-worker.js'],
     'sw-registration': ['./src/sw-registration.js'],
   },

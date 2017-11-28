@@ -16,7 +16,7 @@ global.testVars.storedCoordinates = JSON.stringify({
   longitude: LONGITUDE,
 });
 
-require('../src/app');
+require('../src/root');
 const dom = global.testVars.dom;
 
 expect(global.testVars.timerCallback).to.be.a('function');

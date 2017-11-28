@@ -4,7 +4,7 @@ const CACHE_PREFIX = 'sunset-clock-';
 const CACHE_NAME = CACHE_PREFIX + 'BUILD_HASH';
 const CACHED_URLS = [
   'index.html',
-  'app.js',
+  'root.js',
   'sw-registration.js',
   // 'app.js.map', // seems that service worker caching doesn't work for source maps
   'manifest.json',
