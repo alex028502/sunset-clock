@@ -3,7 +3,7 @@
 const EXPECTED_DEFAULT_POSITION = '51°47′60″N 0°0′0″W';
 const expect = require('chai').expect;
 
-require('./helpers/integration-setup');
+require('./helpers/integration-global');
 const findOnClickMethodOfElement = require('./helpers/find-on-click');
 
 require('../src/root');

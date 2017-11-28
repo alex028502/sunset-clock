@@ -5,7 +5,7 @@
 
 const expect = require('chai').expect;
 
-require('./helpers/integration-setup');
+require('./helpers/integration-global');
 const findOnClickMethodOfElement = require('./helpers/find-on-click');
 
 const NO_WRITE_MESSAGE = 'access denied for writing';

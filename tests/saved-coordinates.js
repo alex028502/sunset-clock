@@ -11,7 +11,7 @@ const mount = require('enzyme').mount;
 
 // for now let's use the same set-up and just pass in the global variables
 // some of it will be redundant (like the dom)
-require('./helpers/integration-setup');
+require('./helpers/integration-global');
 
 const Sut = require('../src/clock-app');
 
