@@ -19,71 +19,85 @@ const reducer = combineReducers({
   coordinates: require('./reducers/coordinates'),
 });
 
-let persistedState = null;
-let errorMessage = 'using Greenwich until location is updated';
-try {
-  persistedState = localStorage.getItem('coordinates') && JSON.parse(localStorage.getItem('coordinates'));
-} catch (e) {
-  errorMessage = `${e} - cannot read location from disk, and might not be able to write`;
-}
+class ClockApp extends React.Component {
+  constructor(props) {
+    super(props);
+    let persistedState = null;
+    let errorMessage = 'using Greenwich until location is updated';
+    try {
+      const savedCoordinates = props.localStorage.getItem('coordinates');
+      persistedState = savedCoordinates && JSON.parse(savedCoordinates);
+    } catch (e) {
+      errorMessage = `${e} - cannot read location from disk, and might not be able to write`;
+    }
 
-const initialState = persistedState ? {
-  coordinates: persistedState,
-} : {
-  coordinates: {
-    longitude: 0,
-    latitude: 51 + 48 / 60,
-    error: errorMessage,
-  },
-};
-
-const store = createStore(reducer, Object.assign({
-  time: new Date(),
-}, initialState), require('./lib/get-redux-dev-tools-ext')(window));
-
-function saveCoordinates(coordinates) {
-  try {
-    localStorage.setItem('coordinates', JSON.stringify(coordinates));
-  } catch (e) {
-    // fail silently - the should have already been warned when reading
-  }
-}
-
-const render = function() {
-  ReactDOM.render(
-    <Clock
-      time={store.getState().time}
-      coordinates={store.getState().coordinates} updateLocation={updateLocation}
-    />,
-    document.getElementById('root'),
-  );
-};
-
-startTimer();
-
-function startTimer() {
-  setInterval(setTime, 10000);
-}
-
-function setTime() {
-  store.dispatch({type: 'SET_TIME', value: currentTime()});
-}
-
-function updateLocation() {
-  navigator.geolocation.getCurrentPosition(function(position) {
-    const newCoordinates = {
-      longitude: position.coords.longitude,
-      latitude: position.coords.latitude,
-      error: null,
+    const initialState = persistedState ? {
+      coordinates: persistedState,
+    } : {
+      coordinates: {
+        longitude: 0,
+        latitude: 51 + 48 / 60,
+        error: errorMessage,
+      },
     };
-    store.dispatch({type: 'SET_COORDINATES', value: newCoordinates});
-    saveCoordinates(newCoordinates);
-  }, function(error) {
-    store.dispatch({
-      type: 'SET_COORDINATES_ERROR',
-      value: error.message,
-    });
-  });
+
+    this.store = createStore(reducer, Object.assign({
+      time: new Date(),
+    }, initialState), require('./lib/get-redux-dev-tools-ext')(props.window));
+  }
+
+  render() {
+    return <Clock
+      time={this.store.getState().time}
+      coordinates={this.store.getState().coordinates} updateLocation={this.updateLocation.bind(this)}
+    />;
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      10000
+    );
+    this.store.subscribe(function() {
+      this.forceUpdate();
+    }.bind(this));
+  }
+
+  // ADD THIS IN WHEN THERE IS A TEST THAT UNMOUNTS THE COMPONENT
+  // FOR NOW NOTHING EVER GETS UNMOUNTED
+  // componentWillUnmount() {
+  //   // thanks https://reactjs.org/docs/state-and-lifecycle.html c
+  //   clearInterval(this.timerID);
+  // }
+
+  tick() {
+    this.store.dispatch({type: 'SET_TIME', value: currentTime()});
+  }
+
+  saveCoordinates(coordinates) {
+    try {
+      this.props.localStorage.setItem('coordinates', JSON.stringify(coordinates));
+    } catch (e) {
+      // fail silently - the should have already been warned when reading
+    }
+  }
+
+  updateLocation() {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      const newCoordinates = {
+        longitude: position.coords.longitude,
+        latitude: position.coords.latitude,
+        error: null,
+      };
+      this.store.dispatch({type: 'SET_COORDINATES', value: newCoordinates});
+      this.saveCoordinates(newCoordinates);
+    }.bind(this), function(error) {
+      this.store.dispatch({
+        type: 'SET_COORDINATES_ERROR',
+        value: error.message,
+      });
+    }.bind(this));
+  }
 }
 
 function Clock(props) {
@@ -106,6 +120,8 @@ function ClockFace(props) {
   />;
 }
 
-render();
-store.subscribe(render);
+ReactDOM.render(
+  <ClockApp window={window} localStorage={localStorage} />,
+  document.getElementById('root'),
+);
 
