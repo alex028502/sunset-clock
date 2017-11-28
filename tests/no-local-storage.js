@@ -3,15 +3,20 @@
 // sometimes access to local storage is forbidden
 // so make sure that the user knows why nothing works
 
+const React = require('react');
+
 const expect = require('chai').expect;
 
-require('./helpers/integration-global');
-const findOnClickMethodOfElement = require('./helpers/find-on-click');
+const integrationHelper = require('./helpers/integration-helper');
+
+require('./helpers/enzyme-setup');
+
+const mount = require('enzyme').mount;
 
 const NO_WRITE_MESSAGE = 'access denied for writing';
 const NO_READ_MESSAGE = 'access denied for reading';
 
-global.localStorage = {
+const localStorage = {
   setItem: function(key) {
     throw new Error(NO_WRITE_MESSAGE);
   },
@@ -20,48 +25,49 @@ global.localStorage = {
   },
 };
 
-require('../src/root');
-const dom = global.testVars.dom;
+const Sut = require('../src/clock-app');
 
-expect(global.testVars.timerCallback).to.be.a('function');
-expect(global.testVars.timerInterval).to.equal(10000);
-expect(global.testVars.storedCoordinates).not.to.be.ok;
+const wrapper = mount(<Sut
+  localStorage={localStorage}
+  geolocation={integrationHelper.props.geolocation}
+  setInterval={integrationHelper.props.setInterval}
+/>);
+
+expect(integrationHelper.testVars.timerCallback).to.be.a('function');
+expect(integrationHelper.testVars.timerInterval).to.equal(10000);
+expect(integrationHelper.testVars.storedCoordinates).not.to.be.ok;
 
 // should fail silently when it tries to write
 // since it already got a messsage when it tried to read initially
 
-expect(dom.serialize(document)).to.include('face.svg');
-expect(dom.serialize(document)).not.to.include('Greenwich');
-expect(dom.serialize(document)).to.include('cannot read');
+expect(wrapper.html()).to.include('face.svg');
+expect(wrapper.html()).not.to.include('Greenwich');
+expect(wrapper.html()).to.include('cannot read');
 
-global.testVars.timerCallback(); // should fail silently
+integrationHelper.testVars.timerCallback(); // should fail silently
 
-expect(dom.serialize(document)).to.include('face.svg');
-expect(dom.serialize(document)).not.to.include('Greenwich');
-expect(dom.serialize(document)).to.include(NO_READ_MESSAGE);
-expect(dom.serialize(document)).not.to.include(NO_WRITE_MESSAGE);
+expect(wrapper.html()).to.include('face.svg');
+expect(wrapper.html()).not.to.include('Greenwich');
+expect(wrapper.html()).to.include(NO_READ_MESSAGE);
+expect(wrapper.html()).not.to.include(NO_WRITE_MESSAGE);
 
-const button = dom.window.document.querySelector('button');
-findOnClickMethodOfElement(button)();
+wrapper.find('button').simulate('click');
 
-expect(global.testVars.locationCallback).to.be.ok;
-expect(global.testVars.locationErrorCallback).to.be.ok;
+expect(integrationHelper.testVars.locationCallback).to.be.ok;
+expect(integrationHelper.testVars.locationErrorCallback).to.be.ok;
 
-global.testVars.locationCallback({
+integrationHelper.testVars.locationCallback({
   coords: {
     longitude: 55,
     latitude: 55,
   },
 });
 
-expect(dom.serialize(document)).to.include('face.svg');
-expect(dom.serialize(document)).not.to.include('Greenwich');
+expect(wrapper.html()).to.include('face.svg');
+expect(wrapper.html()).not.to.include('Greenwich');
 
 // nothing is saved but there is no message anymore
-expect(dom.serialize(document)).not.to.include('cannot read');
-expect(dom.serialize(document)).not.to.include(NO_READ_MESSAGE);
-expect(dom.serialize(document)).not.to.include(NO_WRITE_MESSAGE);
-expect(dom.serialize(document)).to.include('55');
-
-
-process.exit(0);
+expect(wrapper.html()).not.to.include('cannot read');
+expect(wrapper.html()).not.to.include(NO_READ_MESSAGE);
+expect(wrapper.html()).not.to.include(NO_WRITE_MESSAGE);
+expect(wrapper.html()).to.include('55');
