@@ -76,6 +76,11 @@ expect(dom.serialize(document)).not.to.include('Greenwich');
 expect(dom.serialize(document)).to.include('updated');
 expect(dom.serialize(document)).to.include('55°0′0″N 55°0′0″');
 
+
+expect(JSON.parse(global.testVars.storedCoordinates)).to.have.property('latitude', 55);
+expect(JSON.parse(global.testVars.storedCoordinates)).to.have.property('timestamp');
+expect(JSON.parse(global.testVars.storedCoordinates)).to.have.property('longitude', 55);
+
 global.testVars.timerCallback();
 
 expect(dom.serialize(document)).to.include('face.svg');
