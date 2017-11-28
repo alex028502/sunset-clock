@@ -8,8 +8,6 @@ import {combineReducers} from 'redux';
 
 const formatcoords = require('formatcoords');
 
-const moment = require('moment');
-
 const italianTime = require('./lib/italian-time');
 const currentTime = require('./lib/current-time');
 
@@ -104,13 +102,8 @@ function Clock(props) {
     <ClockFace fraction={italianTime(props.time, props.coordinates)} />
     <p>{formatcoords(props.coordinates.latitude, props.coordinates.longitude).format('DDMMssX', {decimalPlaces: 0})}</p>
     <p style={{color: 'red'}}>{props.coordinates.error ? props.coordinates.error : ''}</p>
-    <p>{props.coordinates.timestamp ? `location updated ${formatDate(props.coordinates.timestamp)}` : ''}</p>
     <p><button onClick={props.updateLocation}>update location</button></p>
   </div>;
-}
-
-function formatDate(date) {
-  return moment(date).calendar().toLowerCase();
 }
 
 function ClockFace(props) {

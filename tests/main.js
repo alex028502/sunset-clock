@@ -83,7 +83,7 @@ expect(wrapper.html()).to.include('face.svg');
 expect(wrapper.html()).not.to.include(EXPECTED_DEFAULT_POSITION);
 expect(wrapper.html()).not.to.include(LOCATION_ERROR_MESSAGE);
 expect(wrapper.html()).not.to.include('Greenwich');
-expect(wrapper.html()).to.include('updated');
+expect(wrapper.html()).not.to.include('updated'); // TODO: remove once we forget all about updated
 expect(wrapper.html()).to.include('55°0′0″N 55°0′0″');
 
 
@@ -101,7 +101,7 @@ expect(wrapper.html()).to.include('face.svg');
 expect(wrapper.html()).not.to.include(EXPECTED_DEFAULT_POSITION);
 expect(wrapper.html()).not.to.include(LOCATION_ERROR_MESSAGE);
 expect(wrapper.html()).not.to.include('Greenwich');
-expect(wrapper.html()).to.include('updated');
+expect(wrapper.html()).not.to.include('updated'); // TODO: remove
 expect(wrapper.html()).to.include('55°0′0″N 55°0′0″');
 
 const positionAfterNextTick = currentPosition(wrapper);

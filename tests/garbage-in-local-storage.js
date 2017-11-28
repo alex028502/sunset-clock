@@ -43,7 +43,7 @@ integrationHelper.testVars.locationCallback({
 
 expect(wrapper.html()).to.include('face.svg');
 expect(wrapper.html()).to.include('55');
-expect(wrapper.html()).to.include('updated');
+expect(wrapper.html()).not.to.include('updated'); // TODO: remove
 expect(wrapper.html()).not.to.include('Greenwich');
 expect(wrapper.html()).not.to.include('cannot read');
 

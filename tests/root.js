@@ -81,7 +81,7 @@ global.testVars.locationCallback({
 expect(dom.serialize(document)).to.include('face.svg');
 expect(dom.serialize(document)).not.to.include(EXPECTED_DEFAULT_POSITION);
 expect(dom.serialize(document)).not.to.include('Greenwich');
-expect(dom.serialize(document)).to.include('updated');
+expect(dom.serialize(document)).not.to.include('updated'); // TODO: remove eventually
 expect(dom.serialize(document)).to.include('55°0′0″N 55°0′0″');
 
 
