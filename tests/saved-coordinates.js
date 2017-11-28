@@ -1,8 +1,19 @@
 'use strict';
 
-const expect = require('chai').expect;
+const React = require('react');
 
+const expect = require('chai').expect;
+const Enzyme = require('enzyme');
+const Adapter = require('enzyme-adapter-react-16');
+Enzyme.configure({ adapter: new Adapter() });
+
+const mount = require('enzyme').mount;
+
+// for now let's use the same set-up and just pass in the global variables
+// some of it will be redundant (like the dom)
 require('./helpers/integration-setup');
+
+const Sut = require('../src/clock-app');
 
 const EXPECTED_COORDINATE_STRING = '44°0′0″N 55°0′0″E';
 const LATITUDE = 44;
@@ -16,14 +27,11 @@ global.testVars.storedCoordinates = JSON.stringify({
   longitude: LONGITUDE,
 });
 
-require('../src/root');
-const dom = global.testVars.dom;
+const wrapper = mount(<Sut window={window} localStorage={localStorage} setInterval={setInterval} />);
 
 expect(global.testVars.timerCallback).to.be.a('function');
 expect(global.testVars.timerInterval).to.equal(10000);
 expect(global.testVars.storedCoordinates).to.be.ok;
 
-expect(dom.serialize(document)).to.include('face.svg');
-expect(dom.serialize(document)).to.include(EXPECTED_COORDINATE_STRING);
-
-process.exit(0);
+expect(wrapper.html()).to.include('face.svg');
+expect(wrapper.html()).to.include(EXPECTED_COORDINATE_STRING);
