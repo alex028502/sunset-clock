@@ -7,11 +7,14 @@ const Enzyme = require('enzyme');
 const Adapter = require('enzyme-adapter-react-16');
 Enzyme.configure({ adapter: new Adapter() });
 
+const jsdom = require('jsdom');
+const dom = new jsdom.JSDOM('<!doctype html><html><body></body></html>');
+global.document = dom.window.document;
+global.window = dom.window;
+
 const mount = require('enzyme').mount;
 
-// for now let's use the same set-up and just pass in the global variables
-// some of it will be redundant (like the dom)
-require('./helpers/integration-global');
+const integrationHelper = require('./helpers/integration-helper');
 
 const Sut = require('../src/clock-app');
 
@@ -22,20 +25,16 @@ const LONGITUDE = 55;
 expect(EXPECTED_COORDINATE_STRING).to.include(LATITUDE);
 expect(EXPECTED_COORDINATE_STRING).to.include(LONGITUDE);
 
-global.testVars.storedCoordinates = JSON.stringify({
+integrationHelper.testVars.storedCoordinates = JSON.stringify({
   latitude: LATITUDE,
   longitude: LONGITUDE,
 });
 
-const wrapper = mount(<Sut
-  geolocation={navigator.geolocation}
-  localStorage={localStorage}
-  setInterval={setInterval}
-/>);
+const wrapper = mount(<Sut {...integrationHelper.props} />);
 
-expect(global.testVars.timerCallback).to.be.a('function');
-expect(global.testVars.timerInterval).to.equal(10000);
-expect(global.testVars.storedCoordinates).to.be.ok;
+expect(integrationHelper.testVars.timerCallback).to.be.a('function');
+expect(integrationHelper.testVars.timerInterval).to.equal(10000);
+expect(integrationHelper.testVars.storedCoordinates).to.be.ok;
 
 expect(wrapper.html()).to.include('face.svg');
 expect(wrapper.html()).to.include(EXPECTED_COORDINATE_STRING);
