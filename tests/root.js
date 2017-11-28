@@ -1,13 +1,40 @@
 'use strict';
 
+'use strict';
+
+require('raf/polyfill');
+
+const integerationHelper = require('./helpers/integration-helper');
+
+// thanks https://github.com/jesstelford/react-testing-mocha-jsdom
+const jsdom = require('jsdom');
+const dom = new jsdom.JSDOM('<!doctype html><html><body><div id="root"></div></body></html>');
+global.document = dom.window.document;
+global.window = dom.window;
+
+global.navigator = {
+  userAgent: 'node.js', //thanks http://stackoverflow.com/a/37084875/5203563
+  geolocation: integerationHelper.props.geolocation,
+};
+
+global.setInterval = integerationHelper.props.setInterval;
+
+global.localStorage = integerationHelper.props.localStorage;
+
+global.testVars = integerationHelper.testVars;
+global.testVars.dom = dom;
+
 const EXPECTED_DEFAULT_POSITION = '51°47′60″N 0°0′0″W';
 const expect = require('chai').expect;
 
-require('./helpers/integration-global');
-const findOnClickMethodOfElement = require('./helpers/find-on-click');
+function findOnClickMethodOfElement(element) {
+  // trial and error
+  // looking for something like __reactEventHandlers$st5eih1w5dnuubr8uo50cnmi
+  const eventHandlerKey = Object.keys(element).filter((name) => name.indexOf('reactEventHandlers') !== -1)[0];
+  return element[eventHandlerKey].onClick;
+}
 
 require('../src/root');
-const dom = global.testVars.dom;
 
 expect(global.testVars.timerCallback).to.be.a('function');
 expect(global.testVars.timerInterval).to.equal(10000);
