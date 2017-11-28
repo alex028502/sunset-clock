@@ -53,7 +53,7 @@ class ClockApp extends React.Component {
   }
 
   componentDidMount() {
-    this.timerID = setInterval(
+    this.timerID = this.props.setInterval(
       () => this.tick(),
       10000
     );

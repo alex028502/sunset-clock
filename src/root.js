@@ -5,8 +5,18 @@ import ReactDOM from 'react-dom';
 
 const ClockApp = require('./clock-app');
 
+
+
 ReactDOM.render(
-  <ClockApp window={window} localStorage={localStorage} />,
+  <ClockApp window={window} localStorage={localStorage} setInterval={setIntervalProp} />,
   document.getElementById('root'),
 );
 
+function setIntervalProp(action, interval) {
+  // without this wrapper I get an error 'illegal invocation'
+  // when it tries to call it in componentDidMount
+  // but the unit tests all pass
+  // so don't delete this wrapper without trying the app in
+  // a browser
+  setInterval(action, interval);
+}
