@@ -42,7 +42,7 @@ class ClockApp extends React.Component {
 
     this.store = createStore(reducer, Object.assign({
       time: new Date(),
-    }, initialState), require('./lib/get-redux-dev-tools-ext')(props.window));
+    }, initialState), require('./lib/get-redux-dev-tools-ext')(window));
   }
 
   render() {
@@ -82,7 +82,7 @@ class ClockApp extends React.Component {
   }
 
   updateLocation() {
-    navigator.geolocation.getCurrentPosition(function(position) {
+    this.props.geolocation.getCurrentPosition(function(position) {
       const newCoordinates = {
         longitude: position.coords.longitude,
         latitude: position.coords.latitude,

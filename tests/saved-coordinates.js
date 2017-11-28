@@ -27,7 +27,11 @@ global.testVars.storedCoordinates = JSON.stringify({
   longitude: LONGITUDE,
 });
 
-const wrapper = mount(<Sut window={window} localStorage={localStorage} setInterval={setInterval} />);
+const wrapper = mount(<Sut
+  geolocation={navigator.geolocation}
+  localStorage={localStorage}
+  setInterval={setInterval}
+/>);
 
 expect(global.testVars.timerCallback).to.be.a('function');
 expect(global.testVars.timerInterval).to.equal(10000);

@@ -8,7 +8,7 @@ const ClockApp = require('./clock-app');
 
 
 ReactDOM.render(
-  <ClockApp window={window} localStorage={localStorage} setInterval={setIntervalProp} />,
+  <ClockApp geolocation={navigator.geolocation} localStorage={localStorage} setInterval={setIntervalProp} />,
   document.getElementById('root'),
 );
 
