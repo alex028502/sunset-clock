@@ -13,14 +13,11 @@ expect(global.testVars.timerCallback).to.be.a('function');
 expect(global.testVars.timerInterval).to.equal(10000);
 expect(global.testVars.storedCoordinates).not.to.be.ok;
 
-// THE BAD NEWS IS THAT JSDOM DOESN'T SEEM TO SUPPORT
-// CSS3 PROPERTIES SO WE CAN CHECK THAT ALL THE PIECES
-// WORK TOGETHER BUT WE CAN'T CHECK THAT THE ANGLE IS CORRECT
-// WITH THIS STRATEGY
-
 expect(dom.serialize(document)).to.include('face.svg');
 expect(dom.serialize(document)).to.include(EXPECTED_DEFAULT_POSITION);
 expect(dom.serialize(document)).to.include('Greenwich');
+
+const initialPosition = currentPosition(dom);
 
 global.testVars.timerCallback();
 
@@ -28,6 +25,11 @@ expect(global.testVars.storedCoordinates).not.to.be.ok;
 expect(dom.serialize(document)).to.include('face.svg');
 expect(dom.serialize(document)).to.include(EXPECTED_DEFAULT_POSITION);
 expect(dom.serialize(document)).to.include('Greenwich');
+
+
+const positionAfterFirstTick = currentPosition(dom);
+
+expect(positionAfterFirstTick).to.be.above(initialPosition);
 
 expect(global.testVars.locationCallback).not.to.be.ok;
 expect(global.testVars.locationErrorCallback).not.to.be.ok;
@@ -56,6 +58,8 @@ expect(dom.serialize(document)).not.to.include('Greenwich');
 global.testVars.locationCallback = null;
 global.testVars.locationErrorCallback = null;
 
+expect(currentPosition(dom)).to.equal(positionAfterFirstTick);
+
 findOnClickMethodOfElement(button)();
 
 expect(global.testVars.locationCallback).to.be.ok;
@@ -80,6 +84,9 @@ expect(JSON.parse(global.testVars.storedCoordinates)).to.have.property('latitude
 expect(JSON.parse(global.testVars.storedCoordinates)).not.to.have.property('timestamp');
 expect(JSON.parse(global.testVars.storedCoordinates)).to.have.property('longitude', 55);
 
+const positionAfterChangingLocation = currentPosition(dom);
+expect(positionAfterChangingLocation).not.to.equal(positionAfterFirstTick);
+
 global.testVars.timerCallback();
 
 expect(dom.serialize(document)).to.include('face.svg');
@@ -89,4 +96,25 @@ expect(dom.serialize(document)).not.to.include('Greenwich');
 expect(dom.serialize(document)).to.include('updated');
 expect(dom.serialize(document)).to.include('55°0′0″N 55°0′0″');
 
+const positionAfterNextTick = currentPosition(dom);
+expect(positionAfterNextTick).to.be.above(positionAfterChangingLocation);
+
+global.testVars.timerCallback();
+
+// the needle position is so accurate that even with the tiny time changes
+// it still moves when we tell it to update
+
+const positionAfterLastTick = currentPosition(dom);
+expect(positionAfterLastTick).to.be.above(positionAfterNextTick);
+
 process.exit(0);
+
+function currentPosition(dom) {
+  // probably won't work when there is more than one image in the component
+  const START = 'rotate(';
+  const END = 'deg)';
+  const style = dom.window.document.querySelector('img').style.transform;
+  expect(style).to.include(START);
+  expect(style).to.include(END);
+  return parseFloat(style.replace(START, '').replace(END, ''), 10);
+}
