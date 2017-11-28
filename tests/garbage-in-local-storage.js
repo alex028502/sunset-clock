@@ -3,49 +3,50 @@
 // sometimes access to local storage is forbidden
 // so make sure that the user knows why nothing works
 
+const React = require('react');
+
 const expect = require('chai').expect;
 
-require('./helpers/integration-global');
-const findOnClickMethodOfElement = require('./helpers/find-on-click');
+require('./helpers/enzyme-setup');
+const integrationHelper = require('./helpers/integration-helper');
+const mount = require('enzyme').mount;
 
-global.testVars.storedCoordinates = 'THIS IS NOT JSON';
+integrationHelper.testVars.storedCoordinates = 'THIS IS NOT JSON';
 
-require('../src/root');
-const dom = global.testVars.dom;
+const Sut = require('../src/clock-app');
 
-expect(global.testVars.timerCallback).to.be.a('function');
-expect(global.testVars.timerInterval).to.equal(10000);
-expect(global.testVars.storedCoordinates).to.be.ok;
+const wrapper = mount(<Sut {...integrationHelper.props} />);
 
-expect(dom.serialize(document)).to.include('face.svg');
-expect(dom.serialize(document)).not.to.include('Greenwich');
+expect(integrationHelper.testVars.timerCallback).to.be.a('function');
+expect(integrationHelper.testVars.timerInterval).to.equal(10000);
+expect(integrationHelper.testVars.storedCoordinates).to.be.ok;
+
+expect(wrapper.html()).to.include('face.svg');
+expect(wrapper.html()).not.to.include('Greenwich');
 
 // doesn't know that it's just a json problem - assumes it can't read
-expect(dom.serialize(document)).to.include('cannot read');
+expect(wrapper.html()).to.include('cannot read');
 
 // should still be able to save new coordinates
 
-const button = dom.window.document.querySelector('button');
-findOnClickMethodOfElement(button)();
+wrapper.find('button').simulate('click');
 
-expect(global.testVars.locationCallback).to.be.ok;
-expect(global.testVars.locationErrorCallback).to.be.ok;
+expect(integrationHelper.testVars.locationCallback).to.be.ok;
+expect(integrationHelper.testVars.locationErrorCallback).to.be.ok;
 
-global.testVars.locationCallback({
+integrationHelper.testVars.locationCallback({
   coords: {
     longitude: 55,
     latitude: 55,
   },
 });
 
-expect(dom.serialize(document)).to.include('face.svg');
-expect(dom.serialize(document)).to.include('55');
-expect(dom.serialize(document)).to.include('updated');
-expect(dom.serialize(document)).not.to.include('Greenwich');
-expect(dom.serialize(document)).not.to.include('cannot read');
+expect(wrapper.html()).to.include('face.svg');
+expect(wrapper.html()).to.include('55');
+expect(wrapper.html()).to.include('updated');
+expect(wrapper.html()).not.to.include('Greenwich');
+expect(wrapper.html()).not.to.include('cannot read');
 
 // everything should be saved in local storage
-expect(global.testVars.storedCoordinates).to.be.ok;
-expect(JSON.stringify(global.testVars.storedCoordinates)).to.include('55');
-
-process.exit(0);
+expect(integrationHelper.testVars.storedCoordinates).to.be.ok;
+expect(JSON.stringify(integrationHelper.testVars.storedCoordinates)).to.include('55');
