@@ -44,27 +44,6 @@ findOnClickMethodOfElement(button)();
 expect(global.testVars.locationCallback).to.be.ok;
 expect(global.testVars.locationErrorCallback).to.be.ok;
 
-const LOCATION_ERROR_MESSAGE = 'THIS IS A TEST ERROR';
-
-global.testVars.locationErrorCallback({
-  message: LOCATION_ERROR_MESSAGE,
-});
-
-expect(dom.serialize(document)).to.include('face.svg');
-expect(dom.serialize(document)).to.include(EXPECTED_DEFAULT_POSITION);
-expect(dom.serialize(document)).to.include(LOCATION_ERROR_MESSAGE);
-expect(dom.serialize(document)).not.to.include('Greenwich');
-
-global.testVars.locationCallback = null;
-global.testVars.locationErrorCallback = null;
-
-expect(currentPosition(dom)).to.equal(positionAfterFirstTick);
-
-findOnClickMethodOfElement(button)();
-
-expect(global.testVars.locationCallback).to.be.ok;
-expect(global.testVars.locationErrorCallback).to.be.ok;
-
 global.testVars.locationCallback({
   coords: {
     longitude: 55,
@@ -74,7 +53,6 @@ global.testVars.locationCallback({
 
 expect(dom.serialize(document)).to.include('face.svg');
 expect(dom.serialize(document)).not.to.include(EXPECTED_DEFAULT_POSITION);
-expect(dom.serialize(document)).not.to.include(LOCATION_ERROR_MESSAGE);
 expect(dom.serialize(document)).not.to.include('Greenwich');
 expect(dom.serialize(document)).to.include('updated');
 expect(dom.serialize(document)).to.include('55°0′0″N 55°0′0″');
@@ -84,28 +62,7 @@ expect(JSON.parse(global.testVars.storedCoordinates)).to.have.property('latitude
 expect(JSON.parse(global.testVars.storedCoordinates)).not.to.have.property('timestamp');
 expect(JSON.parse(global.testVars.storedCoordinates)).to.have.property('longitude', 55);
 
-const positionAfterChangingLocation = currentPosition(dom);
-expect(positionAfterChangingLocation).not.to.equal(positionAfterFirstTick);
-
-global.testVars.timerCallback();
-
-expect(dom.serialize(document)).to.include('face.svg');
-expect(dom.serialize(document)).not.to.include(EXPECTED_DEFAULT_POSITION);
-expect(dom.serialize(document)).not.to.include(LOCATION_ERROR_MESSAGE);
-expect(dom.serialize(document)).not.to.include('Greenwich');
-expect(dom.serialize(document)).to.include('updated');
-expect(dom.serialize(document)).to.include('55°0′0″N 55°0′0″');
-
-const positionAfterNextTick = currentPosition(dom);
-expect(positionAfterNextTick).to.be.above(positionAfterChangingLocation);
-
-global.testVars.timerCallback();
-
-// the needle position is so accurate that even with the tiny time changes
-// it still moves when we tell it to update
-
-const positionAfterLastTick = currentPosition(dom);
-expect(positionAfterLastTick).to.be.above(positionAfterNextTick);
+expect(currentPosition(dom)).not.to.equal(positionAfterFirstTick);
 
 process.exit(0);
 
