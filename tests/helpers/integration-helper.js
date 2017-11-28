@@ -4,7 +4,14 @@
 
 const assert = require('assert');
 
-const testVars = {};
+const testVars = {
+  window: {},
+  document: {
+    location: {
+      hash: '',
+    },
+  },
+};
 
 const geolocation = {
   getCurrentPosition: function(callback, error) {
@@ -39,5 +46,8 @@ module.exports = {
     geolocation: geolocation,
     localStorage: localStorage,
     setInterval: setInterval,
+    window: testVars.window,
+    document: testVars.document,
+    userAgent: 'NODE.JS', // as long as it doesn't container Electron
   },
 };

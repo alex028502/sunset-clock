@@ -5,10 +5,15 @@ import ReactDOM from 'react-dom';
 
 const ClockApp = require('./clock-app');
 
-
-
 ReactDOM.render(
-  <ClockApp geolocation={navigator.geolocation} localStorage={localStorage} setInterval={setIntervalProp} />,
+  <ClockApp
+    geolocation={navigator.geolocation}
+    localStorage={localStorage}
+    setInterval={setIntervalProp}
+    window={window}
+    document={document}
+    userAgent={navigator.userAgent}
+  />,
   document.getElementById('root'),
 );
 

@@ -1,5 +1,7 @@
 'use strict';
 
+require('./helpers/unhandled-rejection');
+
 const React = require('react');
 
 const expect = require('chai').expect;

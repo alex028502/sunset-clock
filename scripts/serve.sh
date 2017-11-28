@@ -14,4 +14,4 @@ echo chrome dev tools.
 echo The url of the app might be somewhere in this list:
 hostname -I | xargs printf "%s\n" | xargs -I {} echo https://{}:$PORT
 
-docker run -p $PORT:443 -e 'DH_SIZE=512' -v $(pwd)/nginx:/etc/nginx/external/ -v $(pwd)/public:/usr/share/nginx/html/sunset-clock:ro $IMAGE
+docker run --rm -p $PORT:443 -e 'DH_SIZE=512' -v $(pwd)/nginx:/etc/nginx/external/ -v $(pwd)/public:/usr/share/nginx/html/sunset-clock:ro $IMAGE

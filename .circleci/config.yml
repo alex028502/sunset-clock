@@ -6,6 +6,11 @@ jobs:
       - image: circleci/node:7.10
     working_directory: ~/repo
     steps:
+      # thanks https://github.com/electron/spectron/issues/144#issuecomment-270778659
+      # it would be a bit quicker to install these dependencies in a docker image
+      # but this will work for now
+      - run: sudo apt install xvfb libxtst6 libxss1 libgtk2.0-0 -y
+      - run: sudo apt install libnss3 libasound2 libgconf-2-4 -y
       - checkout
       - restore_cache:
           keys:
@@ -15,7 +20,7 @@ jobs:
           paths:
             - node_modules
           key: full-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
-      - run: npm test
+      - run: xvfb-run npm test
   deploy:
     docker:
       - image: circleci/node:7.10
@@ -43,3 +48,4 @@ workflows:
           filters:
             branches:
               only: master
+

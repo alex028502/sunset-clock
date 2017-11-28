@@ -1,5 +1,7 @@
 'use strict';
 
+require('./helpers/unhandled-rejection');
+
 const React = require('react');
 
 const EXPECTED_DEFAULT_POSITION = '51°47′60″N 0°0′0″W';

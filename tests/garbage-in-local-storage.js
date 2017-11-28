@@ -1,5 +1,7 @@
 'use strict';
 
+require('./helpers/unhandled-rejection');
+
 // sometimes access to local storage is forbidden
 // so make sure that the user knows why nothing works
 

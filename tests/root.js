@@ -1,5 +1,6 @@
 'use strict';
 
+require('./helpers/unhandled-rejection');
 
 require('raf/polyfill');
 

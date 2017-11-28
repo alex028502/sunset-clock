@@ -1,5 +1,7 @@
 'use strict';
 
+require('./helpers/unhandled-rejection');
+
 // sometimes access to local storage is forbidden
 // so make sure that the user knows why nothing works
 
@@ -27,11 +29,11 @@ const localStorage = {
 
 const Sut = require('../src/clock-app');
 
-const wrapper = mount(<Sut
-  localStorage={localStorage}
-  geolocation={integrationHelper.props.geolocation}
-  setInterval={integrationHelper.props.setInterval}
-/>);
+const props = Object.assign({}, integrationHelper.props, {
+  localStorage: localStorage,
+});
+
+const wrapper = mount(<Sut {...props} />);
 
 expect(integrationHelper.testVars.timerCallback).to.be.a('function');
 expect(integrationHelper.testVars.timerInterval).to.equal(10000);
