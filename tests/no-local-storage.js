@@ -62,3 +62,5 @@ expect(dom.serialize(document)).not.to.include('cannot read');
 expect(dom.serialize(document)).not.to.include(NO_READ_MESSAGE);
 expect(dom.serialize(document)).not.to.include(NO_WRITE_MESSAGE);
 expect(dom.serialize(document)).to.include('55');
+
+process.exit(0);

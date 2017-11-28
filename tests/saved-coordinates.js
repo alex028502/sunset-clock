@@ -25,3 +25,5 @@ expect(global.testVars.storedCoordinates).to.be.ok;
 
 expect(dom.serialize(document)).to.include('face.svg');
 expect(dom.serialize(document)).to.include(EXPECTED_COORDINATE_STRING);
+
+process.exit(0);
