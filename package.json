@@ -9,6 +9,8 @@
     "build": "npm run _build && npm run icons",
     "_package": "electron-packager public --platform=linux --arch=x64 --out=dist --tmpdir=./tmp --overwrite",
     "package": "npm run build && npm run _package",
+    "_mac-package": "electron-packager public --platform=darwin --arch=x64 --out=dist --tmpdir=./tmp --overwrite --icon=icons.inconset",
+    "mac-package": "make icons.icns && npm run build && npm run _mac-package",
     "_start": "webpack-dev-server -d --content-base public --no-inline",
     "start": "npm run icons && npm run _start",
     "_secure": "./scripts/serve.sh",

@@ -30,11 +30,28 @@ app.on('ready', () => {
     }, {
       role: 'quit',
     }],
+  }, {
+    label: 'Edit',
+    submenu: [{
+      role: 'undo',
+    }, {
+      role: 'redo',
+    }, {
+      role: 'cut',
+    }, {
+      role: 'copy',
+    }, {
+      role: 'paste',
+    }],
   }];
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
   mainWindow.loadURL(url('index.html'));
+});
+
+app.on('window-all-closed', function() {
+  app.quit();
 });
 
 function url(filename) {
