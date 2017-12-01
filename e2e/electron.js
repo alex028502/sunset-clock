@@ -18,7 +18,7 @@ const COORDINATES_SETTING = '37°48′49″S 144°57′47″E';
 
 const INITIAL_MESSAGE = 'Choose Set Coordinates from the File menu to change';
 
-(async function(a, b) {
+(async function() {
   await app.start();
 
   let html = await app.client.getHTML('body');
