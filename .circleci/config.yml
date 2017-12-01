@@ -37,20 +37,6 @@ jobs:
           key: prod-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
       - run: npm run build
       - run: ./scripts/deploy.sh
-  osx:
-    macos:
-      xcode: "9.0"
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - osx-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
-      - run: npm install
-      - save_cache:
-          paths:
-            - node_modules
-          key: osx-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
-      - npm run mac-package
 workflows:
   version: 2
   build-deploy:
@@ -62,12 +48,5 @@ workflows:
           filters:
             branches:
               only: master
-      - osx:
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-               - osx
-               - master
+
 
