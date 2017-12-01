@@ -10,7 +10,7 @@
     "_package": "electron-packager public --platform=linux --arch=x64 --out=dist --tmpdir=./tmp --overwrite",
     "package": "npm run build && npm run _package",
     "_start": "webpack-dev-server -d --content-base public --no-inline",
-    "start": "npm run icons && npm run start",
+    "start": "npm run icons && npm run _start",
     "_secure": "./scripts/serve.sh",
     "secure": "npm run build && npm run _secure",
     "_electron": "electron public",
