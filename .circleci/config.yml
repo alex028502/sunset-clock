@@ -67,5 +67,7 @@ workflows:
             - test
           filters:
             branches:
-              only: osx
+              only:
+               - osx
+               - master
 
