@@ -9,7 +9,7 @@ import {combineReducers} from 'redux';
 const Coordinates = require('coordinate-parser');
 
 
-const formatcoords = require('formatcoords');
+const formatCoordinates = require('./lib/format-coordinates');
 
 const italianTime = require('./lib/italian-time');
 const currentTime = require('./lib/current-time');
@@ -134,10 +134,6 @@ function Clock(props) {
     <p style={{color: 'red'}}>{props.coordinates.error ? props.coordinates.error : ''}</p>
     { props.electron ? '' : <p><button onClick={props.updateLocation}>update location</button></p> }
   </div>;
-}
-
-function formatCoordinates(coordinates) {
-  return formatcoords(coordinates.latitude, coordinates.longitude).format('DDMMssX', {decimalPlaces: 0});
 }
 
 function ClockFace(props) {
