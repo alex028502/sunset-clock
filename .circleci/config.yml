@@ -4,6 +4,7 @@ jobs:
   test:
     docker:
       - image: circleci/node:7.10
+      - image: selenium/standalone-chrome
     working_directory: ~/repo
     steps:
       # thanks https://github.com/electron/spectron/issues/144#issuecomment-270778659
@@ -20,7 +21,7 @@ jobs:
           paths:
             - node_modules
           key: full-dependencies-{{ checksum "package-lock.json" }}
-      - run: xvfb-run npm test
+      - run: DISPLAY=:99 SELENIUM_REMOTE_URL=http://0.0.0.0:4444/wd/hub npm test
   deploy:
     docker:
       - image: circleci/node:7.10

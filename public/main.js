@@ -19,7 +19,7 @@ app.on('ready', () => {
     submenu: [{
       label: 'Set Coordinates',
       click: function(item, focussedWindow) {
-        mainWindow.loadURL(url('index.html') + '#set-coordinates');
+        mainWindow.loadURL(url('main.html') + '#set-coordinates');
       },
     }, {
       role: 'reload',
@@ -47,7 +47,7 @@ app.on('ready', () => {
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
-  mainWindow.loadURL(url('index.html'));
+  mainWindow.loadURL(url('main.html'));
 });
 
 app.on('window-all-closed', function() {

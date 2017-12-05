@@ -1,6 +1,6 @@
 'use strict';
 
-require('./helpers/unhandled-rejection');
+require('../helpers/unhandled-rejection');
 
 // sometimes access to local storage is forbidden
 // so make sure that the user knows why nothing works
@@ -9,13 +9,13 @@ const React = require('react');
 
 const expect = require('chai').expect;
 
-require('./helpers/enzyme-setup');
-const integrationHelper = require('./helpers/integration-helper');
+require('./../helpers/enzyme-setup');
+const integrationHelper = require('../helpers/integration-helper');
 const mount = require('enzyme').mount;
 
 integrationHelper.testVars.storedCoordinates = 'THIS IS NOT JSON';
 
-const Sut = require('../src/clock-app');
+const Sut = require('../../src/clock-app');
 
 const wrapper = mount(<Sut {...integrationHelper.props} />);
 

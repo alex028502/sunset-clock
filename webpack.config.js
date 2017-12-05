@@ -1,10 +1,14 @@
 const StringReplacePlugin = require('string-replace-webpack-plugin');
+const BannerPlugin = require('webpack').BannerPlugin;
 const path = require('path');
 const uuid = require('uuid');
+
+const BUILD_HASH = uuid(); // not really a hash but could be one day
 
 module.exports = {
   plugins: [
     new StringReplacePlugin(),
+    new BannerPlugin(`service worker version ${BUILD_HASH} not [hash]`),
   ],
   entry: {
     'root': ['./src/root.js'],
@@ -25,7 +29,7 @@ module.exports = {
           pattern: 'BUILD_HASH',
           replacement: function() {
             // TODO: figure out how to use the webpack build hash instead of a random string
-            return uuid();
+            return BUILD_HASH;
           },
         }],
       })},
