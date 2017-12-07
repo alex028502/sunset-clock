@@ -1,0 +1,11 @@
+[
+  "main.html",
+  "root.js",
+  "sw-registration.js",
+  "manifest.json",
+  "48x48.png",
+  "96x96.png",
+  "192x192.png",
+  "favicon.ico",
+  "face.svg"
+]

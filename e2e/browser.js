@@ -55,6 +55,15 @@ expect(function() {
   checkForDinosaurPage('other text', 'test');
 }).not.to.throw();
 
+// since this test checks the compiled public folder
+// it is a good place to make sure that all the files in the file list
+// are present
+for (const file of require('../src/lib/file-list.json')) {
+  const fullPath = `${__dirname}/../public/${file}`;
+  expect(fs.existsSync(fullPath)).to.equal(true, fullPath);
+}
+// TODO: also check that all the files we need _are_ in the list
+
 (async function() {
   const port = await portfinder.getPortPromise();
   const URL = `http://localhost:${port}/`;
