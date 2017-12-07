@@ -209,19 +209,21 @@ for (const file of require('../src/lib/file-list.json')) {
   await getNonInfoLogs(driver).then(function(logs) {
     expect(logs).to.have.lengthOf(0);
   });
-})().catch(async function(e) {
-  // TODO: remove or make it work all the time
-  await driver.manage().logs().get('browser').then(function(logs) {
-    console.log(logs);
+})().finally(async function() {
+
+  await runIfExists(driver, function() {
+    return driver.manage().logs().get('browser').then(function(logs) {
+      console.log(logs);
+    });
   });
-  throw e;
-}).finally(async function() {
-  await runIfExists(driver, 'quit');
+  await runIfExists(driver, function() {
+    return driver.quit();
+  });
 });
 
-function runIfExists(obj, meth) {
+function runIfExists(obj, command) {
   if (obj) {
-    return obj[meth]();
+    return command();
   }
   return null;
 }
