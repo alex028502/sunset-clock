@@ -66,12 +66,14 @@ for (const file of require('../../../src/lib/file-list.json')) {
 }
 // TODO: also check that all the files we need _are_ in the list
 
+const PUBLIC_DIRECTORY = `${__dirname}/../../../public`;
+
 (async function() {
   const port = await portfinder.getPortPromise();
   const URL = `http://localhost:${port}/`;
 
   await runIfExists(null, 'method'); // just to prove this works for when we need it
-  server = await app(port);
+  server = await app(PUBLIC_DIRECTORY, port);
 
   // while experimenting we tried pointing it at a different binary
   // like this
@@ -145,7 +147,7 @@ for (const file of require('../../../src/lib/file-list.json')) {
     expect(source).not.to.include('Greenwich');
   });
 
-  server = await app(port, SECOND_VERSION_KEY);
+  server = await app(PUBLIC_DIRECTORY, port, SECOND_VERSION_KEY);
 
   await driver.get(URL);
   await sleep(200); // TODO: wait for load

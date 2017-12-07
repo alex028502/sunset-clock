@@ -10,7 +10,7 @@ const enableDestroy = require('server-destroy');
 
 const ROOT_DIRECTORY = '/sunset-clock';
 
-module.exports = function(port, version) {
+module.exports = function(directory, port, version) {
   const app = new Koa();
   const router = new Router();
 
@@ -33,7 +33,7 @@ module.exports = function(port, version) {
   router.get(ROOT_DIRECTORY + '/', modifiedPublicDir);
 
   async function modifiedPublicDir(ctx) {
-    await serve('./public', { index: 'index.html' })(ctx);
+    await serve(directory, { index: 'index.html' })(ctx);
     if (ctx.request.path === `${ROOT_DIRECTORY}/service-worker.js` && version) {
       const originalBody = await readStream(ctx.body);
       const originalVersion = extractVersion(originalBody);

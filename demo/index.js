@@ -4,10 +4,13 @@
 
 const PORT = 8080;
 
-if (process.argv[2]) {
-  console.log(`starting but changing version number to ${process.argv[2]}`);
+const REPLACEMENT_HASH = process.argv[3];
+const PUBLIC_DIRECTORY = process.argv[2];
+
+if (REPLACEMENT_HASH) {
+  console.log(`starting but changing version number to ${REPLACEMENT_HASH}`);
 }
 
-require('./lib')(8080, process.argv[2]).then(function() {
-  console.log(`server running on port ${PORT}`);
+require('./lib')(PUBLIC_DIRECTORY, 8080, REPLACEMENT_HASH).then(function() {
+  console.log(`serving ${PUBLIC_DIRECTORY} on port ${PORT}`);
 });

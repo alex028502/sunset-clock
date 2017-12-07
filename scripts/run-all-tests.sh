@@ -15,15 +15,11 @@ npm run unit-test
 
 ./scripts/sweep.sh
 
-npm run demo-unit-test
+npm run demo-test
 
 ./scripts/sweep.sh
 
 npm run lib-test
-
-./scripts/sweep.sh
-
-npm run demo-integration-test
 
 ./scripts/sweep.sh
 

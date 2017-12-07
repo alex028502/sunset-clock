@@ -9,20 +9,27 @@ const axios = require('axios');
 
 const extractVersion = require('./lib/extract-version');
 
-// integration tests expect the public folder to exist already
-// first just make sure there are some compiled files in the public directory
-expect(fs.existsSync('public/service-worker.js')).to.be.ok;
-expect(fs.existsSync('public/index.html')).to.be.ok;
-
 require('../lib/unhandled-rejection');
 
 const sut = require('./lib');
 
 const TEST_HASH = 'modified-hash-for-testing-service-worker';
+const TEST_DIRECTORY = `${__dirname}/public`;
 
 expect(countSubstring('xx', 'yy')).not.to.be.ok;
 expect(countSubstring('xx', 'xxx')).to.equal(1);
 expect(countSubstring('xx', 'xxxx')).to.equal(2);
+
+for (const filename of fs.readdirSync(TEST_DIRECTORY)) {
+  // every file should include its own name
+  const name = filename.split('.')[0];
+  const ext = filename.split('.')[1];
+  if (ext !== 'js' && ext !== 'html') {
+    continue;
+  }
+  const content = fs.readFileSync(`${TEST_DIRECTORY}/${filename}`, 'utf8');
+  expect(content).to.include(name, filename);
+}
 
 (async function() {
   // start the server with no arguments
@@ -33,7 +40,7 @@ expect(countSubstring('xx', 'xxxx')).to.equal(2);
 
   await makeSureServerIsOff(port);
 
-  server = await sut(port); // start server without modifying hash
+  server = await sut(TEST_DIRECTORY, port); // start server without modifying hash
 
   expect(server).to.have.property('stop');
   expect(server.stop).to.be.a('function');
@@ -50,7 +57,7 @@ expect(countSubstring('xx', 'xxxx')).to.equal(2);
 
   const redirectPage = await get(port, 'sunset-clock/index.html').then(function(response) {
     expect(response.status).to.equal(200);
-    expect(response.data).to.include('redirecting'); // this page sends you to main or reloads it from the cache
+    expect(response.data).to.include('index'); // this page sends you to main or reloads it from the cache
     return response.data;
   });
 
@@ -61,11 +68,13 @@ expect(countSubstring('xx', 'xxxx')).to.equal(2);
 
   const serviceWorker0 = await get(port, 'sunset-clock/service-worker.js').then(function(response) {
     expect(response.status).to.equal(200);
+    expect(response.data).to.include('service-worker');
     return response.data;
   });
 
   const indexHtml0 = await get(port, 'sunset-clock/main.html').then(function(response) {
     expect(response.status).to.equal(200);
+    expect(response.data).to.include('main');
     return response.data;
   });
 
@@ -90,10 +99,24 @@ expect(countSubstring('xx', 'xxxx')).to.equal(2);
   // now start it and modify the hash
   // which will allow us to start the app with a different service worker
   // and a different index so that we can see our browser reload it
-  server = await sut(port, TEST_HASH);
+  server = await sut(TEST_DIRECTORY, port, TEST_HASH);
 
   const serviceWorkerModified = await get(port, 'sunset-clock/service-worker.js').then(function(response) {
     expect(response.status).to.equal(200);
+    return response.data;
+  });
+
+  await get(port, 'sunset-clock/other.js').then(function(response) {
+    expect(response.status).to.equal(200);
+    expect(response.data).to.include('other');
+    expect(response.data).not.to.include(TEST_HASH);
+    return response.data;
+  });
+
+  await get(port, 'sunset-clock/other.html').then(function(response) {
+    expect(response.status).to.equal(200);
+    expect(response.data).to.include('other');
+    expect(response.data).not.to.include(TEST_HASH);
     return response.data;
   });
 
