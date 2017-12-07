@@ -21,7 +21,7 @@
       navigator.serviceWorker.ready.then(function() {
         document.getElementById("message").innerHTML += "...";
         setTimeout(function() {
-          window.location.reload(true);
+          window.location.reload();
         }, 5000);
       })
     } else {

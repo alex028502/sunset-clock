@@ -28,6 +28,8 @@
     "electron-e2e-test": "npm run package && npm run _electron-e2e-test",
     "_browser-e2e-test": "SELENIUM_PROMISE_MANAGER=0 node_modules/.bin/babel-node e2e/browser.js",
     "browser-e2e-test": "npm run build && npm run _browser-e2e-test",
+    "_firefox-e2e-test": "SELENIUM_BROWSER=firefox npm run _browser-e2e-test",
+    "firefox-e2e-test": "npm run build && npm run _firefox-e2e-test",
     "_demo-test": "node demo/test.js",
     "demo-test": "npm run build && npm run _demo-test",
     "lint": "scripts/linted-files.sh | xargs eslint",

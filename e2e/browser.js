@@ -20,6 +20,8 @@ require('../tests/helpers/unhandled-rejection');
 
 const app = require('../demo/lib');
 
+const skipForOtherBrowsers = require('./lib/skip-for-other-browsers');
+
 const fakeLocationSource = fs.readFileSync(__dirname + '/lib/fake-location.js', 'utf8');
 const TOKYO = {
   latitude: '35.6895', // correct format for formatter
@@ -206,16 +208,20 @@ for (const file of require('../src/lib/file-list.json')) {
   expect(amountClockHasMoved).to.be.above(0.95 * EXPECTED_SIZE_OF_TICK);
   expect(amountClockHasMoved).to.be.below(1.05 * EXPECTED_SIZE_OF_TICK);
 
-  await getNonInfoLogs(driver).then(function(logs) {
-    expect(logs).to.have.lengthOf(0);
-  });
-})().finally(async function() {
-
-  await runIfExists(driver, function() {
-    return driver.manage().logs().get('browser').then(function(logs) {
-      console.log(logs);
+  await skipForOtherBrowsers(function() {
+    return getNonInfoLogs(driver).then(function(logs) {
+      expect(logs).to.have.lengthOf(0);
     });
   });
+})().finally(async function() {
+  await skipForOtherBrowsers(function() {
+    return runIfExists(driver, function() {
+      return driver.manage().logs().get('browser').then(function(logs) {
+        console.log(logs);
+      });
+    });
+  });
+
   await runIfExists(driver, function() {
     return driver.quit();
   });
