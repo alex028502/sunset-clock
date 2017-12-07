@@ -20,8 +20,6 @@ require('../../../lib/unhandled-rejection');
 
 const app = require('../../../demo/lib');
 
-const skipForOtherBrowsers = require('./skip-for-other-browsers');
-
 const fakeLocationSource = fs.readFileSync(__dirname + '/fake-location.js', 'utf8');
 const TOKYO = {
   latitude: '35.6895', // correct format for formatter
@@ -267,4 +265,11 @@ function checkForDinosaurPage(source, url) {
   if (source.indexOf('This site can’t be reached') !== -1) {
     throw new Error(`looks like we couldn't reach ${url}`);
   }
+}
+
+function skipForOtherBrowsers(command) {
+  if (!process.env.SELENIUM_BROWSER) {
+    return command();
+  }
+  return undefined;
 }
