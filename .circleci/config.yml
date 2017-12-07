@@ -14,12 +14,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - full-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
+          - full-dependencies-{{ checksum "package-lock.json" }}
       - run: npm install
       - save_cache:
           paths:
             - node_modules
-          key: full-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
+          key: full-dependencies-{{ checksum "package-lock.json" }}
       - run: xvfb-run npm test
   deploy:
     docker:
@@ -29,12 +29,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - prod-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
+          - prod-dependencies-{{ checksum "package-lock.json" }}
       - run: npm install --production
       - save_cache:
           paths:
             - node_modules
-          key: prod-dependencies-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}-{{ checksum ".circleci/config.yml" }}
+          key: prod-dependencies-{{ checksum "package-lock.json" }}
       - run: npm run build
       - run: ./scripts/deploy.sh
 workflows:
