@@ -10,6 +10,8 @@ const enableDestroy = require('server-destroy');
 
 const ROOT_DIRECTORY = '/sunset-clock';
 
+const replaceStream = require('replacestream');
+
 module.exports = function(directory, port, version) {
   const app = new Koa();
   const router = new Router();
@@ -41,8 +43,7 @@ module.exports = function(directory, port, version) {
     }
 
     if (ctx.request.path === `${ROOT_DIRECTORY}/main.html` && version) {
-      const originalBody = await readStream(ctx.body);
-      ctx.body = originalBody.replace('</body>', `<p>version set to ${version} by test server</p></body>`);
+      ctx.body = ctx.body.pipe(replaceStream('</body>', `<p>version set to ${version} by test server</p></body>`));
     }
   }
 
