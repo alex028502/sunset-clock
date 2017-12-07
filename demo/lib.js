@@ -4,7 +4,7 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const serve = require('koa2-static-middleware');
 
-const readStream = require('./lib/read-stream');
+const readStream = require('stream-to-string');
 const extractVersion = require('./lib/extract-version');
 const enableDestroy = require('server-destroy');
 
