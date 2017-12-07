@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 
-const sut = require('../src/lib/file-list.json');
+const sut = require('../../../src/lib/file-list.json');
 
 // subdirectories don't seem to work as expected
 // on github pages

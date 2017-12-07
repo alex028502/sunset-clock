@@ -10,19 +10,19 @@ const expect = require('chai').expect;
 const axios = require('axios');
 const portfinder = require('portfinder');
 
-const formatCoordinates = require('../src/lib/format-coordinates');
+const formatCoordinates = require('../../../src/lib/format-coordinates');
 
 const webdriver = require('selenium-webdriver');
 
 const By = webdriver.By;
 
-require('../tests/helpers/unhandled-rejection');
+require('../../../lib/unhandled-rejection');
 
-const app = require('../demo/lib');
+const app = require('../../../demo/lib');
 
-const skipForOtherBrowsers = require('./lib/skip-for-other-browsers');
+const skipForOtherBrowsers = require('./skip-for-other-browsers');
 
-const fakeLocationSource = fs.readFileSync(__dirname + '/lib/fake-location.js', 'utf8');
+const fakeLocationSource = fs.readFileSync(__dirname + '/fake-location.js', 'utf8');
 const TOKYO = {
   latitude: '35.6895', // correct format for formatter
   longitude: '139.6917',
@@ -42,7 +42,7 @@ expect(process.env.SELENIUM_PROMISE_MANAGER).to.equal('0');
 
 const SECOND_VERSION_KEY = 'second-version-test-key';
 
-const extractAngle = require('./lib/extract-angle');
+const extractAngle = require('../../../lib/extract-angle');
 
 // just check the angle helper does what it should
 
@@ -60,8 +60,8 @@ expect(function() {
 // since this test checks the compiled public folder
 // it is a good place to make sure that all the files in the file list
 // are present
-for (const file of require('../src/lib/file-list.json')) {
-  const fullPath = `${__dirname}/../public/${file}`;
+for (const file of require('../../../src/lib/file-list.json')) {
+  const fullPath = `${__dirname}/../../../public/${file}`;
   expect(fs.existsSync(fullPath)).to.equal(true, fullPath);
 }
 // TODO: also check that all the files we need _are_ in the list
@@ -99,7 +99,7 @@ for (const file of require('../src/lib/file-list.json')) {
     expect(source).to.include('face.svg');
   });
 
-  await sleep(5000); // the message is shown for a long time to make the demo better
+  await sleep(6000); // the message is shown for a long time to make the demo better
 
   const angleInGreenwich = await driver.getPageSource().then(function(source) {
     expect(source).not.to.include('preparing');

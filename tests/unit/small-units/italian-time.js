@@ -61,7 +61,7 @@ expect(function() {
   );
 }).to.throw();
 
-const sut = proxyquire('../src/lib/italian-time', {'suncalc': suncalc});
+const sut = proxyquire('../../../src/lib/italian-time', {'suncalc': suncalc});
 
 // five and a half hours before sunset
 expect(sut(new Date(

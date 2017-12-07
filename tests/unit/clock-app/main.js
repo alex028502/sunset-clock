@@ -1,18 +1,18 @@
 'use strict';
 
-require('../helpers/unhandled-rejection');
+require('../../../lib/unhandled-rejection');
 
 const React = require('react');
 
 const EXPECTED_DEFAULT_POSITION = '51°47′60″N 0°0′0″W';
 const expect = require('chai').expect;
 
-const integrationHelper = require('../helpers/integration-helper');
-require('../helpers/enzyme-setup');
+const integrationHelper = require('./helpers/integration-helper');
+require('./helpers/enzyme-setup');
 
 const mount = require('enzyme').mount;
 
-const Sut = require('../../src/clock-app');
+const Sut = require('../../../src/clock-app');
 
 const wrapper = mount(<Sut {...integrationHelper.props} />);
 

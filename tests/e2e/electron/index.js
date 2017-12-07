@@ -5,12 +5,12 @@
 const Application = require('spectron').Application;
 const expect = require('chai').expect;
 
-require('../tests/helpers/unhandled-rejection');
+require('../../../lib/unhandled-rejection');
 
 const app = new Application({
-  path: __dirname + '/../dist/sunset-clock-linux-x64/sunset-clock',
+  path: __dirname + '/../../../dist/sunset-clock-linux-x64/sunset-clock',
   env: {
-    SPECTRON_TEMP_DIR: require('./lib/tmp-directory'), // thanks https://github.com/electron/spectron/issues/202
+    SPECTRON_TEMP_DIR: require('./tmp-directory'), // thanks https://github.com/electron/spectron/issues/202
   },
 });
 

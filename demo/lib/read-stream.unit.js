@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 
-require('../../tests/helpers/unhandled-rejection');
+require('../../lib/unhandled-rejection');
 
 const fs = require('fs');
 

@@ -2,3 +2,10 @@
 /.nyc_output
 /icons.icns
 /icons.iconset
+/public/*
+!/public/face.svg
+!/public/index.html
+!/public/package.json
+!/public/mainfest.json
+!/public/icons
+!/public/main.html

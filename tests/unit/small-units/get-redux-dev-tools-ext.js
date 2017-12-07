@@ -12,6 +12,6 @@ const fakeWindow = {
   },
 };
 
-const sut = require('../src/lib/get-redux-dev-tools-ext');
+const sut = require('../../../src/lib/get-redux-dev-tools-ext');
 
 expect(sut(fakeWindow)).to.equal(__REDUX_DEVTOOLS_EXTENSION__);

@@ -1,6 +1,6 @@
 'use strict';
 
-require('../helpers/unhandled-rejection');
+require('../../../lib/unhandled-rejection');
 
 // sometimes access to local storage is forbidden
 // so make sure that the user knows why nothing works
@@ -9,9 +9,9 @@ const React = require('react');
 
 const expect = require('chai').expect;
 
-const integrationHelper = require('../helpers/integration-helper');
+const integrationHelper = require('./helpers/integration-helper');
 
-require('../helpers/enzyme-setup');
+require('./helpers/enzyme-setup');
 
 const mount = require('enzyme').mount;
 
@@ -27,7 +27,7 @@ const localStorage = {
   },
 };
 
-const Sut = require('../../src/clock-app');
+const Sut = require('../../../src/clock-app');
 
 const props = Object.assign({}, integrationHelper.props, {
   localStorage: localStorage,

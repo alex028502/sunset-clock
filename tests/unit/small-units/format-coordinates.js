@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 
-const sut = require('../src/lib/format-coordinates');
+const sut = require('../../../src/lib/format-coordinates');
 
 expect(sut({
   latitude: 33 + 33 / 60 + 33.3 / 60 / 60,

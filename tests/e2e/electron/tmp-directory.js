@@ -4,4 +4,4 @@
 // so that we can use it to delete before
 // running tests
 
-module.exports = __dirname + '/../../tmp/e2e';
+module.exports = __dirname + '/../../../tmp/e2e';

@@ -3,17 +3,17 @@
 // in electron there should be no button for automatically updating
 // your location since it doesn't work
 
-require('../helpers/unhandled-rejection');
+require('../../../lib/unhandled-rejection');
 
 const React = require('react');
 
 const expect = require('chai').expect;
 
-require('../helpers/enzyme-setup');
-const integrationHelper = require('../helpers/integration-helper');
+require('./helpers/enzyme-setup');
+const integrationHelper = require('./helpers/integration-helper');
 const mount = require('enzyme').mount;
 
-const Sut = require('../../src/clock-app');
+const Sut = require('../../../src/clock-app');
 
 const props = Object.assign({}, integrationHelper.props, {
   userAgent: 'NODE.JS Electron', // as long as it says Electron somewhere it should work

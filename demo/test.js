@@ -14,7 +14,7 @@ const extractVersion = require('./lib/extract-version');
 expect(fs.existsSync('public/service-worker.js')).to.be.ok;
 expect(fs.existsSync('public/index.html')).to.be.ok;
 
-require('../tests/helpers/unhandled-rejection');
+require('../lib/unhandled-rejection');
 
 const sut = require('./lib');
 

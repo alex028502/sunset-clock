@@ -1,18 +1,18 @@
 'use strict';
 
-require('../helpers/unhandled-rejection');
+require('../../../lib/unhandled-rejection');
 
 const React = require('react');
 
 const expect = require('chai').expect;
 
-require('../helpers/enzyme-setup');
+require('./helpers/enzyme-setup');
 
 const mount = require('enzyme').mount;
 
-const integrationHelper = require('../helpers/integration-helper');
+const integrationHelper = require('./helpers/integration-helper');
 
-const Sut = require('../../src/clock-app');
+const Sut = require('../../../src/clock-app');
 
 const EXPECTED_COORDINATE_STRING = '44°0′0″N 55°0′0″E';
 const LATITUDE = 44;
