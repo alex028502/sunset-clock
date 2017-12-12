@@ -6,7 +6,8 @@
   "scripts": {
     "icons": "make icons",
     "_build": "webpack --devtool source-map",
-    "build": "npm run _build && npm run icons",
+    "_build-sw": "webpack --devtool source-map --config sw.webpack.conf.js",
+    "build": "npm run _build && npm run icons && npm run _build-sw",
     "_package": "electron-packager public --platform=linux --arch=x64 --out=dist --tmpdir=./tmp --overwrite",
     "package": "npm run build && npm run _package",
     "_mac-package": "electron-packager public --platform=darwin --arch=x64 --out=dist --tmpdir=./tmp --overwrite --icon=icons.inconset",
