@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Sunset Clock</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="favicon.ico?v2" type="image/x-icon" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="launcher-icon-4x.png">
+</head>
+<body>
+  <div id="root" style="text-align: center;" />
+    <img src='face.svg' />
+    <p id='message'></p>
+  </div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      document.getElementById("message").innerHTML = "preparing offline support";
+      navigator.serviceWorker.register('service-worker.js');
+      navigator.serviceWorker.ready.then(function() {
+        document.getElementById("message").innerHTML += "...";
+        setTimeout(function() {
+          window.location.reload();
+        }, 5000);
+      })
+    } else {
+      document.getElementById("message").innerHTML = "no progressive web app support<br />redirecting to online only version";
+      setTimeout(function() {
+        window.location = 'main.html';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

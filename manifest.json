@@ -1,0 +1,25 @@
+{
+  "short_name": "Sunset Clock",
+  "name": "Sunset Clock",
+  "description": "picture out how much light you have left",
+  "icons": [
+    {
+      "src": "icons/48x48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "icons/96x96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "icons/192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "index.html",
+  "orientation": "portrait",
+  "display": "standalone"
+}
