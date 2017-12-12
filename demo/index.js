@@ -1,16 +1,77 @@
 'use strict';
 
-/* eslint no-console: 0 */
+const Koa = require('koa');
+const Router = require('koa-router');
+const serve = require('koa2-static-middleware');
 
-const PORT = 8080;
+const readStream = require('stream-to-string');
+const extractVersion = require('./lib/extract-version');
+const enableDestroy = require('server-destroy');
 
-const REPLACEMENT_HASH = process.argv[3];
-const PUBLIC_DIRECTORY = process.argv[2];
+const ROOT_DIRECTORY = '/sunset-clock';
 
-if (REPLACEMENT_HASH) {
-  console.log(`starting but changing version number to ${REPLACEMENT_HASH}`);
+const replaceStream = require('replacestream');
+
+module.exports = function(directory, port, version) {
+  const app = new Koa();
+  const router = new Router();
+
+  router.get('/', function(ctx) {
+    ctx.status = 301;
+    ctx.redirect(ROOT_DIRECTORY + '/');
+  });
+
+  router.get(ROOT_DIRECTORY, function(ctx, next) {
+    if (ctx.request.path.endsWith('/')) {
+      return next();
+    }
+
+    ctx.redirect(ROOT_DIRECTORY + '/');
+    ctx.status = 301;
+    return null;
+  });
+
+  router.get(ROOT_DIRECTORY + '/*', modifiedPublicDir);
+  router.get(ROOT_DIRECTORY + '/', modifiedPublicDir);
+
+  async function modifiedPublicDir(ctx) {
+    await serve(directory, { index: 'index.html' })(ctx);
+    if (ctx.request.path === `${ROOT_DIRECTORY}/service-worker.js` && version) {
+      const originalBody = await readStream(ctx.body);
+      const originalVersion = extractVersion(originalBody);
+      ctx.body = replaceAll(originalBody, originalVersion, version);
+    }
+
+    if (ctx.request.path === `${ROOT_DIRECTORY}/main.html` && version) {
+      ctx.body = ctx.body.pipe(replaceStream('</body>', `<p>version set to ${version} by test server</p></body>`));
+    }
+  }
+
+  app.use(router.routes());
+
+  return new Promise(function(resolve, reject) {
+    const server = app.listen(port, function() {
+      // thanks https://github.com/koajs/koa/issues/659#issuecomment-184171204
+      enableDestroy(server);
+      resolve({
+        stop: function() {
+          return new Promise(function(r) {
+            server.destroy(function() {
+              r();
+            });
+          });
+        },
+      });
+    });
+  });
+};
+
+function replaceAll(string, o, n) {
+  let newVersion = string;
+  while (newVersion.indexOf(o) !== -1) {
+    newVersion = newVersion.replace(o, n);
+  }
+  return newVersion;
 }
 
-require('./lib')(PUBLIC_DIRECTORY, 8080, REPLACEMENT_HASH).then(function() {
-  console.log(`serving ${PUBLIC_DIRECTORY} on port ${PORT}`);
-});
+

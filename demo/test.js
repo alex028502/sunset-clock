@@ -11,7 +11,7 @@ const extractVersion = require('./lib/extract-version');
 
 require('../lib/unhandled-rejection');
 
-const sut = require('./lib');
+const sut = require('.');
 
 const TEST_HASH = 'modified-hash-for-testing-service-worker';
 const TEST_DIRECTORY = `${__dirname}/public`;

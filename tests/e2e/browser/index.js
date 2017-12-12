@@ -18,7 +18,7 @@ const By = webdriver.By;
 
 require('../../../lib/unhandled-rejection');
 
-const app = require('../../../demo/lib');
+const app = require('../../../demo/');
 
 const fakeLocationSource = fs.readFileSync(__dirname + '/fake-location.js', 'utf8');
 const TOKYO = {
